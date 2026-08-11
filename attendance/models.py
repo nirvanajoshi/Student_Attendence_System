@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from apps.subjects.models import Subject
-from apps.students.models import Student
+from subjects.models import Subject
+from students.models import Student
 
 
 class Attendance(models.Model):
@@ -19,9 +19,7 @@ class Attendance(models.Model):
 
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="present")
 
-    marked_by = models.ForeignKey(
-        User, on_delete=models.SET_NULL, null=True, blank=True, related_name="marked_attendances"
-    )
+    marked_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="marked_attendances")
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
