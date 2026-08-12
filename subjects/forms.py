@@ -1,50 +1,42 @@
 from django import forms
-from .models import Student
+from .models import Subject
 
 
-class StudentForm(forms.ModelForm):
+class SubjectForm(forms.ModelForm):
     class Meta:
-        model = Student
-
+        model = Subject
         fields = [
-            "student_id",
-            "date_of_birth",
-            "gender",
-            "address",
+            "name",
+            "code",
+            "description",
+            "teacher",
             "semester",
-            "enrollment_date",
         ]
 
         widgets = {
-            "student_id": forms.TextInput(
+            "name": forms.TextInput(
                 attrs={
                     "class": "form-control",
-                    "placeholder": "Enter student ID",
+                    "placeholder": "Enter subject name",
                 }
             ),
-            "date_of_birth": forms.DateInput(
+            "code": forms.TextInput(
                 attrs={
                     "class": "form-control",
-                    "type": "date",
+                    "placeholder": "Enter subject code (e.g., CS101)",
                 }
             ),
-            "gender": forms.Select(
-                attrs={"class": "form-control"}
-            ),
-            "address": forms.Textarea(
+            "description": forms.Textarea(
                 attrs={
                     "class": "form-control",
                     "rows": 3,
-                    "placeholder": "Enter address",
+                    "placeholder": "Optional description",
                 }
+            ),
+            "teacher": forms.Select(
+                attrs={"class": "form-control"}
             ),
             "semester": forms.Select(
                 attrs={"class": "form-control"}
-            ),
-            "enrollment_date": forms.DateInput(
-                attrs={
-                    "class": "form-control",
-                    "type": "date",
-                }
             ),
         }
