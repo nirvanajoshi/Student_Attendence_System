@@ -45,3 +45,40 @@ def attendance_create(request):
         "attendance/attendance_form.html",
         {"form": form, "title": "Mark Attendance"},
     )
+
+@login_required
+def attendance_edit(request, pk):
+    """Handles updating an existing attendance record."""
+    attendance = get_object_or_404(Attendance, pk=pk)
+
+    if request.method == "POST":
+        form = AttendanceForm(request.POST, instance=attendance)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Attendance record updated successfully!")
+            return redirect("attendance:attendance_detail", pk=attendance.pk)
+    else:
+        form = AttendanceForm(instance=attendance)
+
+    return render(
+        request,
+        "attendance/attendance_form.html",
+        {"form": form, "attendance": attendance, "title": "Edit Attendance"},
+    )
+
+
+@login_required
+def attendance_delete(request, pk):
+    """Handles deleting an attendance record."""
+    attendance = get_object_or_404(Attendance, pk=pk)
+
+    if request.method == "POST":
+        attendance.delete()
+        messages.success(request, "Attendance record deleted successfully!")
+        return redirect("attendance:attendance_list")
+
+    return render(
+        request,
+        "attendance/attendance_confirm_delete.html",
+        {"attendance": attendance},
+    )
