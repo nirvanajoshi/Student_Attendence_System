@@ -67,3 +67,47 @@ def subject_create(request):
             "title": "Add Subject",
         },
     )
+@login_required
+def subject_edit(request, pk):
+    """Handles updating an existing subject."""
+    subject = get_object_or_404(Subject, pk=pk)
+
+    if request.method == "POST":
+        form = SubjectForm(request.POST, instance=subject)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Subject updated successfully!")
+            return redirect(
+                "subjects:subject_detail",
+                pk=subject.pk,
+            )
+    else:
+        form = SubjectForm(instance=subject)
+
+    return render(
+        request,
+        "subjects/subject_form.html",
+        {
+            "form": form,
+            "subject": subject,
+            "title": "Edit Subject",
+        },
+    )
+
+
+@login_required
+def subject_delete(request, pk):
+    """Handles deleting a subject."""
+    subject = get_object_or_404(Subject, pk=pk)
+
+    if request.method == "POST":
+        subject.delete()
+        messages.success(request, "Subject deleted successfully!")
+        return redirect("subjects:subject_list")
+
+    return render(
+        request,
+        "subjects/subject_confirm_delete.html",
+        {"subject": subject},
+    )
