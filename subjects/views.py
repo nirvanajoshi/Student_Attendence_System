@@ -5,13 +5,6 @@ from django.shortcuts import get_object_or_404, redirect, render
 from .forms import SubjectForm
 from .models import Subject
 
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, redirect, render
-
-from .forms import SubjectForm
-from .models import Subject
-
 
 @login_required
 def subject_list(request):

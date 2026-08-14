@@ -23,7 +23,9 @@ def student_create(request):
     if request.method == "POST":
         form = StudentForm(request.POST)
         if form.is_valid():
-            student = form.save()
+            student = form.save(commit=False)
+            student.user = request.user
+            student.save()
             messages.success(request, "Student added successfully!")
             return redirect("students:student_detail", pk=student.pk)
     else:
