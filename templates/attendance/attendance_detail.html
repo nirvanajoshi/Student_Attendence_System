@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Attendance | Student Attendance System{% endblock %}
+{% block page_title %}Attendance Details{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{% url 'attendance:attendance_list' %}">Attendance</a>
+    <span class="breadcrumb-sep">/</span>
+    <span>{{ attendance.date|date:"M j, Y" }}</span>
+</div>
+
+<div class="page-head">
+    <div>
+        <h2 class="page-heading">Attendance Record</h2>
+        <p class="page-heading-sub">{{ attendance.student }} &middot; {{ attendance.subject }}</p>
+    </div>
+    <div class="page-actions">
+        <a href="{% url 'attendance:attendance_edit' attendance.pk %}" class="btn btn-primary"><i class="bi bi-pencil"></i> Edit</a>
+        <a href="{% url 'attendance:attendance_delete' attendance.pk %}" class="btn btn-danger"><i class="bi bi-trash"></i> Delete</a>
+    </div>
+</div>
+
+<section class="card">
+    <div class="card-header">
+        <h3 class="card-title"><i class="bi bi-clipboard-check"></i> Attendance Information</h3>
+    </div>
+    <div class="card-body">
+        <dl class="detail-grid">
+            <div>
+                <dt>Student</dt>
+                <dd>{{ attendance.student }}</dd>
+            </div>
+            <div>
+                <dt>Subject</dt>
+                <dd>{{ attendance.subject }}</dd>
+            </div>
+            <div>
+                <dt>Date</dt>
+                <dd>{{ attendance.date|date:"F j, Y" }}</dd>
+            </div>
+            <div>
+                <dt>Status</dt>
+                <dd><span class="badge badge-{{ attendance.status }}">{{ attendance.get_status_display }}</span></dd>
+            </div>
+            <div>
+                <dt>Marked By</dt>
+                <dd>
+                    {% if attendance.marked_by %}
+                        {{ attendance.marked_by.get_full_name|default:attendance.marked_by.username }}
+                    {% else %}
+                        <span class="text-muted">—</span>
+                    {% endif %}
+                </dd>
+            </div>
+            <div>
+                <dt>Record Created</dt>
+                <dd>{{ attendance.created_at|date:"M j, Y, g:i a" }}</dd>
+            </div>
+            <div>
+                <dt>Last Updated</dt>
+                <dd>{{ attendance.updated_at|date:"M j, Y, g:i a" }}</dd>
+            </div>
+        </dl>
+    </div>
+    <div class="card-footer">
+        <a href="{% url 'attendance:attendance_list' %}" class="btn btn-outline"><i class="bi bi-arrow-left"></i> Back to Attendance</a>
+    </div>
+</section>
+{% endblock %}

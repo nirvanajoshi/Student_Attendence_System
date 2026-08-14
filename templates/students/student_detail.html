@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}{{ student }} | Students{% endblock %}
+{% block page_title %}Student Details{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{% url 'students:student_list' %}">Students</a>
+    <span class="breadcrumb-sep">/</span>
+    <span>{{ student.student_id }}</span>
+</div>
+
+<div class="page-head">
+    <div>
+        <h2 class="page-heading">{{ student.user.get_full_name|default:student.user.username }}</h2>
+        <p class="page-heading-sub">{{ student.student_id }} &middot; {{ student.get_semester_display }}</p>
+    </div>
+    <div class="page-actions">
+        <a href="{% url 'students:student_edit' student.pk %}" class="btn btn-primary"><i class="bi bi-pencil"></i> Edit</a>
+        <a href="{% url 'students:student_delete' student.pk %}" class="btn btn-danger"><i class="bi bi-trash"></i> Delete</a>
+    </div>
+</div>
+
+<section class="card">
+    <div class="card-header">
+        <h3 class="card-title"><i class="bi bi-person-vcard"></i> Student Information</h3>
+    </div>
+    <div class="card-body">
+        <dl class="detail-grid">
+            <div>
+                <dt>Student ID</dt>
+                <dd>{{ student.student_id }}</dd>
+            </div>
+            <div>
+                <dt>Full Name</dt>
+                <dd>{{ student.user.get_full_name|default:"—" }}</dd>
+            </div>
+            <div>
+                <dt>Username</dt>
+                <dd>{{ student.user.username }}</dd>
+            </div>
+            <div>
+                <dt>Email</dt>
+                <dd>{{ student.user.email|default:"—" }}</dd>
+            </div>
+            <div>
+                <dt>Date of Birth</dt>
+                <dd>{{ student.date_of_birth|date:"F j, Y"|default:"—" }}</dd>
+            </div>
+            <div>
+                <dt>Gender</dt>
+                <dd>{{ student.get_gender_display|default:"—" }}</dd>
+            </div>
+            <div>
+                <dt>Semester</dt>
+                <dd>{{ student.get_semester_display }}</dd>
+            </div>
+            <div>
+                <dt>Address</dt>
+                <dd>{{ student.address|default:"—" }}</dd>
+            </div>
+            <div>
+                <dt>Enrollment Date</dt>
+                <dd>{{ student.enrollment_date|date:"F j, Y"|default:"—" }}</dd>
+            </div>
+            <div>
+                <dt>Record Created</dt>
+                <dd>{{ student.created_at|date:"M j, Y, g:i a" }}</dd>
+            </div>
+            <div>
+                <dt>Last Updated</dt>
+                <dd>{{ student.updated_at|date:"M j, Y, g:i a" }}</dd>
+            </div>
+        </dl>
+    </div>
+    <div class="card-footer">
+        <a href="{% url 'students:student_list' %}" class="btn btn-outline"><i class="bi bi-arrow-left"></i> Back to Students</a>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Subjects | Student Attendance System{% endblock %}
+{% block page_title %}Subjects{% endblock %}
+
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/tables.css' %}">{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div>
+        <h2 class="page-heading">Subjects</h2>
+        <p class="page-heading-sub">Manage all subjects offered at the academy.</p>
+    </div>
+    <div class="page-actions">
+        <a href="{% url 'subjects:subject_create' %}" class="btn btn-primary"><i class="bi bi-journal-plus"></i> Add Subject</a>
+    </div>
+</div>
+
+<section class="card">
+    <div class="table-toolbar">
+        <input type="search" class="table-search-input" data-table-search="subjects-table"
+               placeholder="Search subjects..." aria-label="Search subjects">
+    </div>
+    <div class="table-responsive">
+        <table class="table" id="subjects-table">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th>Teacher</th>
+                    <th>Semester</th>
+                    <th>Description</th>
+                    <th class="th-actions">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for subject in subjects %}
+                <tr>
+                    <td><a href="{% url 'subjects:subject_detail' subject.pk %}" class="link-strong">{{ subject.code }}</a></td>
+                    <td>{{ subject.name }}</td>
+                    <td>
+                        {% if subject.teacher %}
+                            {{ subject.teacher.get_full_name|default:subject.teacher.username }}
+                        {% else %}
+                            <span class="text-muted">Not assigned</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ subject.get_semester_display }}</td>
+                    <td>{{ subject.description|default:"—"|truncatechars:60 }}</td>
+                    <td class="td-actions">
+                        <a href="{% url 'subjects:subject_detail' subject.pk %}" class="btn-icon" title="View"><i class="bi bi-eye"></i></a>
+                        <a href="{% url 'subjects:subject_edit' subject.pk %}" class="btn-icon" title="Edit"><i class="bi bi-pencil"></i></a>
+                        <a href="{% url 'subjects:subject_delete' subject.pk %}" class="btn-icon btn-icon-danger" title="Delete"><i class="bi bi-trash"></i></a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr class="empty-row">
+                    <td colspan="6">
+                        <div class="empty-state">
+                            <div class="empty-icon"><i class="bi bi-journal-bookmark"></i></div>
+                            <p>No subjects have been added yet.</p>
+                            <a href="{% url 'subjects:subject_create' %}" class="btn btn-primary btn-sm">Add your first subject</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr class="no-results-row" style="display: none;">
+                    <td colspan="6">
+                        <div class="empty-state">
+                            <div class="empty-icon"><i class="bi bi-search"></i></div>
+                            <p>No subjects match your search.</p>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

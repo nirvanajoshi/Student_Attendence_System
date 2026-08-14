@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}{{ subject }} | Subjects{% endblock %}
+{% block page_title %}Subject Details{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{% url 'subjects:subject_list' %}">Subjects</a>
+    <span class="breadcrumb-sep">/</span>
+    <span>{{ subject.code }}</span>
+</div>
+
+<div class="page-head">
+    <div>
+        <h2 class="page-heading">{{ subject.name }}</h2>
+        <p class="page-heading-sub">{{ subject.code }} &middot; {{ subject.get_semester_display }}</p>
+    </div>
+    <div class="page-actions">
+        <a href="{% url 'subjects:subject_edit' subject.pk %}" class="btn btn-primary"><i class="bi bi-pencil"></i> Edit</a>
+        <a href="{% url 'subjects:subject_delete' subject.pk %}" class="btn btn-danger"><i class="bi bi-trash"></i> Delete</a>
+    </div>
+</div>
+
+<section class="card">
+    <div class="card-header">
+        <h3 class="card-title"><i class="bi bi-journal-bookmark-fill"></i> Subject Information</h3>
+    </div>
+    <div class="card-body">
+        <dl class="detail-grid">
+            <div>
+                <dt>Name</dt>
+                <dd>{{ subject.name }}</dd>
+            </div>
+            <div>
+                <dt>Code</dt>
+                <dd>{{ subject.code }}</dd>
+            </div>
+            <div>
+                <dt>Teacher</dt>
+                <dd>
+                    {% if subject.teacher %}
+                        {{ subject.teacher.get_full_name|default:subject.teacher.username }}
+                    {% else %}
+                        <span class="text-muted">Not assigned</span>
+                    {% endif %}
+                </dd>
+            </div>
+            <div>
+                <dt>Semester</dt>
+                <dd>{{ subject.get_semester_display }}</dd>
+            </div>
+            <div>
+                <dt>Description</dt>
+                <dd>{{ subject.description|default:"No description provided." }}</dd>
+            </div>
+            <div>
+                <dt>Record Created</dt>
+                <dd>{{ subject.created_at|date:"M j, Y, g:i a" }}</dd>
+            </div>
+            <div>
+                <dt>Last Updated</dt>
+                <dd>{{ subject.updated_at|date:"M j, Y, g:i a" }}</dd>
+            </div>
+        </dl>
+    </div>
+    <div class="card-footer">
+        <a href="{% url 'subjects:subject_list' %}" class="btn btn-outline"><i class="bi bi-arrow-left"></i> Back to Subjects</a>
+    </div>
+</section>
+{% endblock %}

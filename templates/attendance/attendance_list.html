@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Attendance | Student Attendance System{% endblock %}
+{% block page_title %}Attendance{% endblock %}
+
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/tables.css' %}">{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div>
+        <h2 class="page-heading">Attendance Records</h2>
+        <p class="page-heading-sub">View and manage attendance records.</p>
+    </div>
+    <div class="page-actions">
+        <a href="{% url 'attendance:attendance_create' %}" class="btn btn-primary"><i class="bi bi-check2-square"></i> Mark Attendance</a>
+    </div>
+</div>
+
+<section class="card">
+    <div class="table-toolbar">
+        <input type="search" class="table-search-input" data-table-search="attendance-table"
+               placeholder="Search attendance..." aria-label="Search attendance">
+    </div>
+    <div class="table-responsive">
+        <table class="table" id="attendance-table">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Subject</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Marked By</th>
+                    <th class="th-actions">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for attendance in attendances %}
+                <tr>
+                    <td><a href="{% url 'attendance:attendance_detail' attendance.pk %}" class="link-strong">{{ attendance.student }}</a></td>
+                    <td>{{ attendance.subject }}</td>
+                    <td>{{ attendance.date|date:"M j, Y" }}</td>
+                    <td><span class="badge badge-{{ attendance.status }}">{{ attendance.get_status_display }}</span></td>
+                    <td>
+                        {% if attendance.marked_by %}
+                            {{ attendance.marked_by.get_full_name|default:attendance.marked_by.username }}
+                        {% else %}
+                            <span class="text-muted">—</span>
+                        {% endif %}
+                    </td>
+                    <td class="td-actions">
+                        <a href="{% url 'attendance:attendance_detail' attendance.pk %}" class="btn-icon" title="View"><i class="bi bi-eye"></i></a>
+                        <a href="{% url 'attendance:attendance_edit' attendance.pk %}" class="btn-icon" title="Edit"><i class="bi bi-pencil"></i></a>
+                        <a href="{% url 'attendance:attendance_delete' attendance.pk %}" class="btn-icon btn-icon-danger" title="Delete"><i class="bi bi-trash"></i></a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr class="empty-row">
+                    <td colspan="6">
+                        <div class="empty-state">
+                            <div class="empty-icon"><i class="bi bi-clipboard-check"></i></div>
+                            <p>No attendance records yet.</p>
+                            <a href="{% url 'attendance:attendance_create' %}" class="btn btn-primary btn-sm">Mark your first attendance</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr class="no-results-row" style="display: none;">
+                    <td colspan="6">
+                        <div class="empty-state">
+                            <div class="empty-icon"><i class="bi bi-search"></i></div>
+                            <p>No attendance records match your search.</p>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

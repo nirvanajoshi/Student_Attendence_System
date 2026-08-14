@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Register | Student Attendance System{% endblock %}
+
+{% block body_class %}auth-page{% endblock %}
+
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/forms.css' %}">{% endblock %}
+
+{% block body %}
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <div class="auth-brand">
+            <span class="auth-brand-icon"><i class="bi bi-mortarboard-fill"></i></span>
+            <h1>Student Attendance System</h1>
+            <p>Create your account to get started</p>
+        </div>
+
+        {% if messages %}
+            <div class="messages" role="status">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags|default:'info' }}">
+                        <span>{{ message }}</span>
+                        <button type="button" class="alert-close" aria-label="Dismiss">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group {% if field.errors %}has-error{% endif %}">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} <span class="required">*</span>{% endif %}</label>
+                    {{ field }}
+                    {% if field.help_text %}<small class="form-help">{{ field.help_text }}</small>{% endif %}
+                    {% for error in field.errors %}<span class="form-error">{{ error }}</span>{% endfor %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary btn-block btn-submit-mt">
+                <i class="bi bi-person-plus"></i> Register
+            </button>
+        </form>
+
+        <p class="auth-switch">Already have an account? <a href="{% url 'accounts:login' %}">Login</a></p>
+    </div>
+    <p class="auth-footer">&copy; 2026 Student Attendance Management System</p>
+</div>
+{% endblock %}

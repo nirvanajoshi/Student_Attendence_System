@@ -1,0 +1,133 @@
+/* ============================================================
+   Forms
+   ============================================================ */
+
+.form-card {
+    max-width: 860px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 24px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group-full {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.form-group .required {
+    color: var(--danger);
+}
+
+.form-control {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: var(--radius);
+    font-size: 14.5px;
+    font-family: inherit;
+    color: var(--text);
+    background: var(--surface);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(127, 29, 29, 0.12);
+}
+
+.form-control::placeholder {
+    color: #9ca3af;
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 90px;
+}
+
+select.form-control {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%236B7280'%3E%3Cpath d='M4.646 6.146a.5.5 0 0 1 .708 0L8 8.793l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 14px;
+    padding-right: 36px;
+}
+
+input[type="file"].form-control {
+    padding: 7px;
+}
+
+.form-help {
+    font-size: 12.5px;
+    color: var(--muted);
+}
+
+.form-help ul {
+    margin: 4px 0 0;
+    padding-left: 18px;
+}
+
+.form-error {
+    font-size: 12.5px;
+    color: var(--danger);
+    font-weight: 500;
+}
+
+.has-error .form-control {
+    border-color: var(--danger);
+}
+
+.form-alert {
+    grid-column: 1 / -1;
+}
+
+.form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 12px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+    margin-top: 6px;
+}
+
+/* Auth card forms */
+.auth-card form .form-group {
+    margin-bottom: 16px;
+}
+
+.btn-submit-mt {
+    margin-top: 4px;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 640px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+    }
+}

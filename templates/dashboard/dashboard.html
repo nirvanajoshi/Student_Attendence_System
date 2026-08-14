@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard | Student Attendance System{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div>
+        <h2 class="page-heading">Welcome back, {{ user.get_full_name|default:user.username }}!</h2>
+        <p class="page-heading-sub">Here's what's happening with your academy today.</p>
+    </div>
+    <div class="page-actions">
+        <a href="{% url 'students:student_create' %}" class="btn btn-primary"><i class="bi bi-person-plus"></i> Add Student</a>
+        <a href="{% url 'subjects:subject_create' %}" class="btn btn-primary"><i class="bi bi-journal-plus"></i> Add Subject</a>
+        <a href="{% url 'attendance:attendance_create' %}" class="btn btn-primary"><i class="bi bi-check2-square"></i> Mark Attendance</a>
+    </div>
+</div>
+
+<section class="stat-grid">
+    <div class="stat-card">
+        <div class="stat-icon stat-icon-red"><i class="bi bi-people-fill"></i></div>
+        <div>
+            <span class="stat-value">{{ total_students }}</span>
+            <span class="stat-label">Total Students</span>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-icon-maroon"><i class="bi bi-journal-bookmark-fill"></i></div>
+        <div>
+            <span class="stat-value">{{ total_subjects }}</span>
+            <span class="stat-label">Total Subjects</span>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-icon-green"><i class="bi bi-check-circle-fill"></i></div>
+        <div>
+            <span class="stat-value">{{ present_today }}</span>
+            <span class="stat-label">Present Today</span>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-icon-red"><i class="bi bi-x-circle-fill"></i></div>
+        <div>
+            <span class="stat-value">{{ absent_today }}</span>
+            <span class="stat-label">Absent Today</span>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-icon-amber"><i class="bi bi-clock-fill"></i></div>
+        <div>
+            <span class="stat-value">{{ late_today }}</span>
+            <span class="stat-label">Late Today</span>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-icon-maroon"><i class="bi bi-graph-up-arrow"></i></div>
+        <div>
+            <span class="stat-value">{{ attendance_percentage }}<small>%</small></span>
+            <span class="stat-label">Today's Attendance</span>
+        </div>
+    </div>
+</section>
+
+{% with total_today=present_today|add:absent_today|add:late_today %}
+<section class="card">
+    <div class="card-header">
+        <h3 class="card-title"><i class="bi bi-clipboard-check"></i> Today's Attendance Summary</h3>
+        <span class="text-muted">{{ total_today }} record{{ total_today|pluralize }}</span>
+    </div>
+    <div class="card-body">
+        {% if total_today == 0 %}
+            <div class="empty-state">
+                <div class="empty-icon"><i class="bi bi-calendar-x"></i></div>
+                <p>No attendance has been marked yet today.</p>
+                <a href="{% url 'attendance:attendance_create' %}" class="btn btn-primary btn-sm">Mark Attendance</a>
+            </div>
+        {% else %}
+            <div class="summary-row">
+                <div class="summary-item">
+                    <span class="summary-dot dot-green"></span>
+                    <span class="summary-label">Present</span>
+                    <span class="summary-value">{{ present_today }}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-dot dot-red"></span>
+                    <span class="summary-label">Absent</span>
+                    <span class="summary-value">{{ absent_today }}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-dot dot-amber"></span>
+                    <span class="summary-label">Late</span>
+                    <span class="summary-value">{{ late_today }}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-dot dot-maroon"></span>
+                    <span class="summary-label">Attendance Rate</span>
+                    <span class="summary-value">{{ attendance_percentage }}%</span>
+                </div>
+            </div>
+            <div class="progress">
+                <div class="progress-bar" style="width: {{ attendance_percentage }}%;"></div>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endwith %}
+
+<section class="card">
+    <div class="card-header">
+        <h3 class="card-title"><i class="bi bi-lightning-charge"></i> Quick Actions</h3>
+    </div>
+    <div class="card-body">
+        <div class="quick-action-grid">
+            <a href="{% url 'students:student_list' %}" class="quick-action">
+                <i class="bi bi-people-fill"></i>
+                <span>View Students<small>Browse the student directory</small></span>
+            </a>
+            <a href="{% url 'subjects:subject_list' %}" class="quick-action">
+                <i class="bi bi-journal-bookmark-fill"></i>
+                <span>View Subjects<small>Browse all subjects</small></span>
+            </a>
+            <a href="{% url 'attendance:attendance_list' %}" class="quick-action">
+                <i class="bi bi-clipboard-check-fill"></i>
+                <span>View Attendance<small>Check attendance records</small></span>
+            </a>
+            <a href="{% url 'accounts:profile' %}" class="quick-action">
+                <i class="bi bi-person-fill"></i>
+                <span>My Profile<small>Manage your account</small></span>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

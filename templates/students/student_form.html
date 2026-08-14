@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | Students{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/forms.css' %}">{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{% url 'students:student_list' %}">Students</a>
+    <span class="breadcrumb-sep">/</span>
+    <span>{{ title }}</span>
+</div>
+
+<section class="card form-card">
+    <div class="card-header">
+        <h3 class="card-title"><i class="bi bi-person-plus"></i> {{ title }}</h3>
+    </div>
+    <div class="card-body">
+        <form method="post" class="form-grid">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger form-alert">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            {% for field in form %}
+                <div class="form-group {% if field.errors %}has-error{% endif %}{% if field.field.widget.input_type == 'textarea' %} form-group-full{% endif %}">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} <span class="required">*</span>{% endif %}</label>
+                    {{ field }}
+                    {% if field.help_text %}<small class="form-help">{{ field.help_text }}</small>{% endif %}
+                    {% for error in field.errors %}<span class="form-error">{{ error }}</span>{% endfor %}
+                </div>
+            {% endfor %}
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i> Save Student</button>
+                <a href="{% if form.instance.pk %}{% url 'students:student_detail' form.instance.pk %}{% else %}{% url 'students:student_list' %}{% endif %}" class="btn btn-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}
